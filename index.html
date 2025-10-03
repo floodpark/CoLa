@@ -1,1 +1,348 @@
-CoLa Main Page
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoLa 소개</title>
+    <style>
+        :root {
+            font-family: "Pretendard", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color-scheme: only light;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(160deg, #f2f6ff 0%, #eef2ff 45%, #f7f8ff 100%);
+            color: #1f2a44;
+        }
+
+        .page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: clamp(2.5rem, 8vw, 5rem) clamp(1.6rem, 6vw, 4rem);
+            background: radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15), transparent 45%),
+                radial-gradient(circle at 85% 30%, rgba(34, 197, 94, 0.15), transparent 40%),
+                #ffffffaa;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(31, 42, 68, 0.08);
+        }
+
+        .hero {
+            max-width: 960px;
+            margin: 0 auto;
+            display: grid;
+            gap: clamp(1.5rem, 4vw, 3rem);
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(2.4rem, 6vw, 3.6rem);
+            letter-spacing: -0.02em;
+            color: #111827;
+        }
+
+        .hero p {
+            margin: 0;
+            font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+            line-height: 1.8;
+            color: #364152;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+            margin-top: 1.6rem;
+        }
+
+        .cta-primary,
+        .cta-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 999px;
+            padding: 0.85rem 1.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.25s ease, background 0.3s ease;
+        }
+
+        .cta-primary {
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: #ffffff;
+            box-shadow: 0 18px 30px rgba(79, 70, 229, 0.25);
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 36px rgba(79, 70, 229, 0.32);
+        }
+
+        .cta-secondary {
+            background: rgba(15, 23, 42, 0.05);
+            color: #1f2a44;
+        }
+
+        .cta-secondary:hover {
+            background: rgba(15, 23, 42, 0.08);
+            transform: translateY(-1px);
+        }
+
+        main {
+            flex: 1;
+            padding: clamp(2.5rem, 8vw, 4.5rem) clamp(1.6rem, 6vw, 4rem);
+        }
+
+        .section-title {
+            font-size: clamp(1.6rem, 3vw, 2.1rem);
+            margin: 0 0 1rem;
+            color: #111827;
+        }
+
+        .highlights {
+            max-width: 1040px;
+            margin: 0 auto;
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
+
+        .highlight-card {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 18px;
+            padding: 1.8rem;
+            border: 1px solid rgba(99, 102, 241, 0.12);
+            box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 26px 48px rgba(15, 23, 42, 0.12);
+        }
+
+        .highlight-card h2 {
+            margin: 0 0 0.75rem;
+            font-size: 1.35rem;
+            color: #312e81;
+        }
+
+        .highlight-card p {
+            margin: 0;
+            color: #4b5563;
+            line-height: 1.7;
+            font-size: 0.98rem;
+        }
+
+        .details {
+            max-width: 960px;
+            margin: clamp(3rem, 9vw, 4.5rem) auto;
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .details article {
+            background: #ffffffd1;
+            border-radius: 16px;
+            padding: 1.8rem;
+            border: 1px solid rgba(148, 163, 184, 0.22);
+        }
+
+        .details h3 {
+            margin: 0 0 0.85rem;
+            font-size: 1.2rem;
+            color: #1f2937;
+        }
+
+        .details p {
+            margin: 0;
+            line-height: 1.75;
+            color: #475569;
+            font-size: 0.97rem;
+        }
+
+        .timeline {
+            max-width: 960px;
+            margin: 0 auto clamp(4rem, 9vw, 5.5rem);
+            background: #0f172a;
+            color: #f8fafc;
+            border-radius: 22px;
+            padding: clamp(2rem, 6vw, 3rem);
+            box-shadow: 0 25px 48px rgba(15, 23, 42, 0.35);
+        }
+
+        .timeline h2 {
+            margin: 0 0 1.5rem;
+            font-size: clamp(1.6rem, 3vw, 2.1rem);
+        }
+
+        .timeline-steps {
+            display: grid;
+            gap: 1.6rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .timeline-step {
+            background: rgba(148, 163, 255, 0.12);
+            border-radius: 16px;
+            padding: 1.4rem;
+        }
+
+        .timeline-step strong {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-size: 1.05rem;
+            color: #c7d2fe;
+            letter-spacing: 0.01em;
+        }
+
+        .timeline-step span {
+            color: #e2e8f0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        @media (max-width: 640px) {
+            .hero-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .cta-primary,
+            .cta-secondary {
+                justify-content: center;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header>
+            <div class="hero">
+                <h1>CoLa에 오신 것을 환영합니다</h1>
+                <p>
+                    CoLa는 창의적인 사람들과 혁신을 꿈꾸는 팀이 서로의 에너지를 나누고, 함께 성장할 수 있도록 설계된 커뮤니티입니다.
+                    아이디어 발굴부터 프로젝트 실행까지, 여러분의 다음 여정이 자연스럽게 연결되도록 돕습니다.
+                </p>
+                <div class="hero-actions">
+                    <a class="cta-primary" href="#join">지금 참여하기</a>
+                    <a class="cta-secondary" href="#programs">프로그램 살펴보기</a>
+                </div>
+            </div>
+        </header>
+        <main>
+            <section id="programs">
+                <h2 class="section-title">우리가 만드는 변화</h2>
+                <div class="highlights">
+                    <article class="highlight-card">
+                        <h2>실전형 프로그램</h2>
+                        <p>
+                            디자인 스프린트, 서비스 제작, 해커톤 등 실무 중심 활동으로 아이디어를 빠르게 실험하고 성장시킵니다.
+                        </p>
+                    </article>
+                    <article class="highlight-card">
+                        <h2>확장 가능한 네트워크</h2>
+                        <p>
+                            멘토, 업계 전문가, 동료 메이커와의 연결을 통해 서로의 경험을 공유하고 든든한 협업 생태계를 만듭니다.
+                        </p>
+                    </article>
+                    <article class="highlight-card">
+                        <h2>지속 가능한 성장</h2>
+                        <p>
+                            목표 설정과 피드백 세션을 통해 장기적인 커리어 로드맵을 설계하며, 각자의 가능성을 현실로 이끕니다.
+                        </p>
+                    </article>
+                    <article class="highlight-card">
+                        <h2>열린 문화</h2>
+                        <p>
+                            누구나 주도적으로 제안하고 실행하는 문화를 통해 실패를 두려워하지 않는 안전한 실험실을 제공합니다.
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="details" aria-labelledby="detail-title">
+                <h2 id="detail-title" class="sr-only">CoLa 커뮤니티에서 경험할 수 있는 것</h2>
+                <article>
+                    <h3>함께 성장하는 러닝 트랙</h3>
+                    <p>
+                        다양한 러닝 트랙을 통해 기술, 디자인, 비즈니스 등 폭넓은 분야를 탐색합니다. 커뮤니티 리더가 큐레이션한 커리큘럼과 피어 러닝으로 지식을 실전에 연결하세요.
+                    </p>
+                </article>
+                <article>
+                    <h3>커뮤니티가 만드는 프로젝트</h3>
+                    <p>
+                        관심사 기반의 프로젝트 팀이 자율적으로 구성되어 제품을 만들고 검증합니다. CoLa는 필요한 자원과 피드백을 제공해 프로젝트의 완성도를 높입니다.
+                    </p>
+                </article>
+                <article>
+                    <h3>의미 있는 관계</h3>
+                    <p>
+                        정기 네트워킹과 소규모 멘토링으로 깊이 있는 대화를 나누며, 협업 가능한 파트너를 자연스럽게 만날 수 있습니다. 함께 걸어갈 동료들을 발견해 보세요.
+                    </p>
+                </article>
+            </section>
+
+            <section class="timeline" id="join">
+                <h2>이렇게 함께해요</h2>
+                <div class="timeline-steps">
+                    <div class="timeline-step">
+                        <strong>1. 오리엔테이션 참여</strong>
+                        <span>CoLa의 철학과 활동 방식을 소개받고, 커뮤니티가 추구하는 가치를 확인합니다.</span>
+                    </div>
+                    <div class="timeline-step">
+                        <strong>2. 맞춤형 온보딩</strong>
+                        <span>관심 분야와 목표를 바탕으로 맞춤 러닝 플랜과 프로젝트 팀을 추천받습니다.</span>
+                    </div>
+                    <div class="timeline-step">
+                        <strong>3. 프로젝트 실행</strong>
+                        <span>정기 세션과 동료 피드백을 활용해 아이디어를 제품과 서비스로 성장시킵니다.</span>
+                    </div>
+                    <div class="timeline-step">
+                        <strong>4. 성과 공유 & 확장</strong>
+                        <span>데모 데이와 커뮤니티 쇼케이스에서 결과를 나누고, 더 넓은 네트워크로 활동을 확장합니다.</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer>
+            © <span id="year"></span> CoLa Community. 함께 만드는 미래.
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
