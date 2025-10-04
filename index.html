@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>매달리기 루틴 타이머</title>
+    <title>CoLa Routine Hub</title>
+    <meta name="description" content="CoLa 루틴 허브: 매달리기 타이머와 저속노화 식단 가이드를 한 곳에서 확인하세요." />
     <style>
         :root {
             font-family: "Pretendard", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             color-scheme: light;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         *,
@@ -21,561 +22,379 @@
             margin: 0;
             min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: clamp(1.5rem, 4vw, 3rem);
+            flex-direction: column;
             background: linear-gradient(160deg, #f2f6ff 0%, #eef2ff 45%, #f7f8ff 100%);
             color: #0f172a;
         }
 
-        main {
-            width: min(960px, 100%);
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.25);
         }
 
-        .app-card {
-            background: rgba(255, 255, 255, 0.92);
-            border-radius: 22px;
-            box-shadow: 0 30px 70px rgba(15, 23, 42, 0.12);
-            padding: clamp(2rem, 5vw, 3rem);
-            display: grid;
-            gap: clamp(1.8rem, 4vw, 2.8rem);
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            max-width: 1120px;
+            height: 68px;
+            margin: 0 auto;
+            padding: 0 1.75rem;
         }
 
-        header h1 {
-            margin: 0 0 0.4rem;
-            font-size: clamp(2rem, 5vw, 2.6rem);
-            color: #111827;
-        }
-
-        header p {
-            margin: 0;
-            color: #475569;
-            font-size: clamp(1rem, 2.4vw, 1.05rem);
-        }
-
-        .panel {
-            background: rgba(248, 250, 252, 0.85);
-            border-radius: 18px;
-            padding: clamp(1.2rem, 3vw, 1.8rem);
-            border: 1px solid rgba(148, 163, 184, 0.18);
-        }
-
-        .panel h2 {
-            margin: 0 0 1rem;
-            font-size: 1.25rem;
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 700;
+            font-size: 1.1rem;
             color: #1f2937;
         }
 
-        label {
-            display: block;
-            margin-bottom: 0.4rem;
+        .brand span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.12);
+            color: #4f46e5;
+            font-size: 1.3rem;
+        }
+
+        nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            color: #334155;
+            color: #475569;
+            text-decoration: none;
+            padding: 0.45rem 0.9rem;
+            border-radius: 999px;
+            transition: background 0.2s ease, color 0.2s ease;
         }
 
-        input[type="number"],
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 0.75rem 0.9rem;
-            border-radius: 12px;
-            border: 1px solid rgba(148, 163, 184, 0.6);
-            background: #f8fafc;
-            font-size: 1rem;
-            color: #0f172a;
+        nav a:hover,
+        nav a:focus-visible {
+            background: rgba(99, 102, 241, 0.12);
+            color: #4f46e5;
+            outline: none;
         }
 
-        input:focus {
-            outline: 2px solid rgba(79, 70, 229, 0.35);
-            outline-offset: 2px;
+        main {
+            flex: 1;
         }
 
-        .button-row {
+        .hero {
+            padding: clamp(4rem, 8vw, 6rem) 1.75rem;
+        }
+
+        .hero-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            display: grid;
+            gap: 1.8rem;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0 auto;
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            background: rgba(79, 70, 229, 0.12);
+            color: #4338ca;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(2.4rem, 6vw, 3.2rem);
+            color: #111827;
+        }
+
+        .hero p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #475569;
+        }
+
+        .hero-actions {
             display: flex;
             flex-wrap: wrap;
             gap: 0.8rem;
+            justify-content: center;
         }
 
-        button {
-            border: none;
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.85rem 1.6rem;
             border-radius: 999px;
-            padding: 0.75rem 1.6rem;
+            border: none;
             font-weight: 600;
             font-size: 1rem;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.25s ease;
+            text-decoration: none;
         }
 
-        button:disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .primary {
+        .button-primary {
             background: linear-gradient(135deg, #4f46e5, #6366f1);
             color: #ffffff;
-            box-shadow: 0 18px 36px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 18px 36px rgba(79, 70, 229, 0.18);
         }
 
-        .secondary {
-            background: rgba(15, 23, 42, 0.08);
+        .button-secondary {
+            background: rgba(15, 23, 42, 0.06);
             color: #0f172a;
         }
 
-        .danger {
-            background: linear-gradient(135deg, #ef4444, #f97316);
-            color: #ffffff;
-        }
-
-        button:not(:disabled):hover {
+        .button:hover,
+        .button:focus-visible {
             transform: translateY(-2px);
+            outline: none;
         }
 
-        .timer-display {
+        .section {
+            padding: 0 1.75rem clamp(3rem, 6vw, 4rem);
+        }
+
+        .section-inner {
+            max-width: 1040px;
+            margin: 0 auto;
+        }
+
+        .cards {
             display: grid;
-            gap: 0.8rem;
+            gap: clamp(1.4rem, 4vw, 2rem);
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         }
 
-        .timer-display strong {
-            font-size: clamp(2.4rem, 10vw, 3.4rem);
+        .card {
+            border-radius: 24px;
+            padding: 2.2rem;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(148, 163, 184, 0.24);
+            box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+            display: grid;
+            gap: 1rem;
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 1.5rem;
             color: #111827;
-            font-weight: 700;
         }
 
-        .status-pill {
+        .card p {
+            margin: 0;
+            color: #475569;
+            font-size: 0.98rem;
+        }
+
+        .card-footer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
-            padding: 0.35rem 0.9rem;
+            gap: 0.4rem;
             border-radius: 999px;
-            font-size: 0.9rem;
-            background: rgba(59, 130, 246, 0.12);
-            color: #1d4ed8;
+            background: rgba(79, 70, 229, 0.1);
+            color: #4f46e5;
+            font-size: 0.8rem;
             font-weight: 600;
+            padding: 0.35rem 0.9rem;
         }
 
-        .status-pill.idle {
-            background: rgba(96, 165, 250, 0.15);
-            color: #2563eb;
+        .card a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: #4f46e5;
+            border-radius: 999px;
+            padding: 0.55rem 1.1rem;
+            background: rgba(79, 70, 229, 0.08);
+            transition: background 0.2s ease;
         }
 
-        .status-pill.running {
-            background: rgba(74, 222, 128, 0.18);
-            color: #15803d;
+        .card a:hover,
+        .card a:focus-visible {
+            background: rgba(79, 70, 229, 0.16);
+            outline: none;
         }
 
-        .status-pill.paused {
-            background: rgba(251, 191, 36, 0.25);
-            color: #b45309;
+        .section-title {
+            margin-bottom: 1.4rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #111827;
         }
 
-        .status-pill.completed {
-            background: rgba(124, 58, 237, 0.16);
-            color: #5b21b6;
-        }
-
-        ul.log-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: grid;
-            gap: 0.6rem;
-        }
-
-        ul.log-list li {
-            background: rgba(255, 255, 255, 0.75);
-            border-radius: 12px;
-            padding: 0.75rem 1rem;
-            border: 1px solid rgba(148, 163, 184, 0.2);
-            font-size: 0.95rem;
-            color: #1f2937;
-        }
-
-        .message {
-            margin-top: 0.75rem;
-            font-size: 0.95rem;
+        .section-subtitle {
+            margin-bottom: 2.4rem;
             color: #475569;
+            font-size: 1rem;
         }
 
-        .message.error {
-            color: #dc2626;
+        .link-list {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         }
 
-        .message.success {
-            color: #15803d;
+        .link-tile {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.2rem;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #1f2937;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.25s ease;
+        }
+
+        .link-tile:hover,
+        .link-tile:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.1);
+            outline: none;
         }
 
         footer {
+            padding: 2.5rem 1.75rem 3rem;
             text-align: center;
-            font-size: 0.85rem;
             color: #94a3b8;
+            font-size: 0.85rem;
         }
 
         @media (max-width: 720px) {
-            body {
-                padding: 1rem;
-            }
-
-            .button-row {
+            .nav-container {
+                height: auto;
+                padding: 1rem 1.25rem;
+                align-items: flex-start;
+                gap: 1.2rem;
                 flex-direction: column;
-                align-items: stretch;
             }
 
-            button {
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .button {
                 width: 100%;
-                justify-content: center;
+            }
+
+            nav a {
+                padding: 0.35rem 0.7rem;
             }
         }
     </style>
 </head>
 <body>
-    <main>
-        <div class="app-card">
-            <header>
-                <h1>매달리기 루틴 타이머</h1>
-                <p>세트 수와 시간을 설정하면 자동으로 타이머가 진행되고, 완료된 루틴은 Supabase DB에 기록됩니다.</p>
-            </header>
-
-            <section class="panel" aria-labelledby="supabase-settings-title">
-                <h2 id="supabase-settings-title">Supabase 설정</h2>
-                <p class="message">브라우저에 안전하게 익명 키를 저장합니다. 공개 가능한 anon 키만 사용해 주세요.</p>
-                <label for="supabase-url">Supabase Project URL</label>
-                <input id="supabase-url" type="text" inputmode="url" placeholder="https://xxxx.supabase.co" />
-
-                <label for="supabase-key">Supabase anon 키</label>
-                <input id="supabase-key" type="password" placeholder="eyJhbGciOiJIUzI1NiIsInR..." />
-
-                <div class="button-row" style="margin-top: 0.9rem;">
-                    <button id="save-supabase" class="primary" type="button">설정 저장</button>
-                    <button id="clear-supabase" class="secondary" type="button">설정 초기화</button>
-                </div>
-                <div id="supabase-status" class="message"></div>
-            </section>
-
-            <section class="panel" aria-labelledby="routine-settings-title">
-                <h2 id="routine-settings-title">루틴 설정</h2>
-                <label for="set-count">세트 수</label>
-                <input id="set-count" type="number" min="1" value="3" />
-
-                <label for="set-duration">세트당 시간 (초)</label>
-                <input id="set-duration" type="number" min="5" step="5" value="30" />
-
-                <div class="button-row" style="margin-top: 1.1rem;">
-                    <button id="start-btn" class="primary" type="button">시작</button>
-                    <button id="pause-btn" class="secondary" type="button" disabled>일시 정지</button>
-                    <button id="resume-btn" class="secondary" type="button" disabled>재개</button>
-                    <button id="reset-btn" class="danger" type="button">초기화</button>
-                </div>
-            </section>
-
-            <section class="panel timer-display" aria-labelledby="timer-status-title">
-                <h2 id="timer-status-title">타이머 상태</h2>
-                <div class="status-pill idle" id="routine-status">대기 중</div>
-                <div>
-                    <span>현재 세트</span>
-                    <div><strong id="current-set">0</strong> / <span id="total-sets">0</span></div>
-                </div>
-                <div>
-                    <span>남은 시간</span>
-                    <div><strong id="remaining">00:00</strong></div>
-                </div>
-            </section>
-
-            <section class="panel" aria-labelledby="set-log-title">
-                <h2 id="set-log-title">진행 로그</h2>
-                <ul id="set-log" class="log-list"></ul>
-                <div id="log-status" class="message"></div>
-            </section>
-
-            <footer>© <span id="year"></span> CoLa Routine</footer>
+    <header>
+        <div class="nav-container">
+            <div class="brand">
+                <span aria-hidden="true">🏋️‍♂️</span>
+                CoLa Routine Hub
+            </div>
+            <nav aria-label="주요 링크">
+                <a href="#apps">앱 소개</a>
+                <a href="#guides">가이드</a>
+                <a href="https://github.com/floodpark/CoLa" target="_blank" rel="noreferrer">GitHub</a>
+            </nav>
         </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-inner">
+                <div class="hero-tag">CoLa Wellness Program</div>
+                <h1>균형 잡힌 루틴과 식단, 한 곳에서 시작하기</h1>
+                <p>
+                    매달리기 루틴 타이머로 운동 흐름을 자동화하고, 49세 남성을 위한 저속노화 식단 가이드로 혈관 건강을 설계하세요.
+                </p>
+                <div class="hero-actions">
+                    <a class="button button-primary" href="routine.html">매달리기 타이머 실행하기</a>
+                    <a class="button button-secondary" href="저속노화.md">저속노화 식단 살펴보기</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="apps" class="section">
+            <div class="section-inner">
+                <h2 class="section-title">제품 카드</h2>
+                <p class="section-subtitle">CoLa 팀이 유지 관리하는 핵심 툴을 선택해 바로 실행하세요.</p>
+                <div class="cards">
+                    <div class="card">
+                        <div class="badge">#Supabase 연동</div>
+                        <h2>매달리기 루틴 타이머</h2>
+                        <p>
+                            세트 수와 시간을 입력하면 자동으로 타이머가 작동하고, 완료 로그가 Supabase DB에 저장됩니다. 실시간 상태와 로그를 한 화면에서 확인할 수 있습니다.
+                        </p>
+                        <div class="card-footer">
+                            <a href="routine.html">타이머 열기 →</a>
+                            <a href="README.md">설정 가이드 →</a>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="badge">#Wellness Content</div>
+                        <h2>49세 남성 저속노화 식단</h2>
+                        <p>
+                            뇌와 심혈관 건강을 위해 설계한 맞춤형 식단 전략. 오메가-3, 항산화, 나트륨 관리 포인트를 체크리스트와 함께 제공합니다.
+                        </p>
+                        <div class="card-footer">
+                            <a href="저속노화.md">식단 가이드 보기 →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="guides" class="section">
+            <div class="section-inner">
+                <h2 class="section-title">리소스 링크</h2>
+                <p class="section-subtitle">프로젝트 구조와 운영 원칙은 아래 문서를 참고하세요.</p>
+                <div class="link-list">
+                    <a class="link-tile" href="AGENTS.md">Repository Guidelines<span aria-hidden="true">→</span></a>
+                    <a class="link-tile" href="README.md">루틴 앱 사용법<span aria-hidden="true">→</span></a>
+                    <a class="link-tile" href="저속노화.md">저속노화 식단 가이드<span aria-hidden="true">→</span></a>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    <footer>
+        © <span id="year"></span> CoLa Routine. Supabase & Wellness by CoLa 팀.
+    </footer>
 
-        const SUPABASE_URL_KEY = 'cola-supabase-url';
-        const SUPABASE_ANON_KEY = 'cola-supabase-anon-key';
-
-        const supabaseUrlInput = document.getElementById('supabase-url');
-        const supabaseKeyInput = document.getElementById('supabase-key');
-        const supabaseStatus = document.getElementById('supabase-status');
-        const saveSupabaseBtn = document.getElementById('save-supabase');
-        const clearSupabaseBtn = document.getElementById('clear-supabase');
-
-        const setCountInput = document.getElementById('set-count');
-        const setDurationInput = document.getElementById('set-duration');
-        const startBtn = document.getElementById('start-btn');
-        const pauseBtn = document.getElementById('pause-btn');
-        const resumeBtn = document.getElementById('resume-btn');
-        const resetBtn = document.getElementById('reset-btn');
-
-        const routineStatus = document.getElementById('routine-status');
-        const currentSetEl = document.getElementById('current-set');
-        const totalSetsEl = document.getElementById('total-sets');
-        const remainingEl = document.getElementById('remaining');
-        const setLog = document.getElementById('set-log');
-        const logStatus = document.getElementById('log-status');
-
-        document.getElementById('year').textContent = new Date().getFullYear();
-
-        let supabaseClient = null;
-        let supabaseConfig = { url: '', key: '' };
-
-        let timerInterval = null;
-        let isRunning = false;
-        let isPaused = false;
-        let setDurationSeconds = 0;
-        let totalSets = 0;
-        let currentSet = 0;
-        let remainingSeconds = 0;
-        let completedSets = [];
-
-        function formatSeconds(value) {
-            const minutes = Math.floor(value / 60);
-            const seconds = value % 60;
-            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    <script>
+        const yearEl = document.getElementById('year');
+        if (yearEl) {
+            yearEl.textContent = new Date().getFullYear();
         }
-
-        function setStatus(text, variant = 'idle') {
-            routineStatus.textContent = text;
-            routineStatus.className = `status-pill ${variant}`;
-        }
-
-        function updateTimerDisplay() {
-            currentSetEl.textContent = String(currentSet);
-            totalSetsEl.textContent = String(totalSets);
-            remainingEl.textContent = formatSeconds(Math.max(remainingSeconds, 0));
-        }
-
-        function resetState() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-            timerInterval = null;
-            isRunning = false;
-            isPaused = false;
-            setDurationSeconds = 0;
-            totalSets = 0;
-            currentSet = 0;
-            remainingSeconds = 0;
-            completedSets = [];
-            setLog.innerHTML = '';
-            logStatus.textContent = '';
-            logStatus.className = 'message';
-            updateTimerDisplay();
-            setStatus('대기 중', 'idle');
-            updateControls();
-        }
-
-        function updateControls() {
-            startBtn.disabled = isRunning;
-            pauseBtn.disabled = !isRunning || isPaused;
-            resumeBtn.disabled = !isPaused;
-        }
-
-        function appendSetLog(setNumber, finishedAt) {
-            const item = document.createElement('li');
-            const finishedDate = new Date(finishedAt);
-            const timeString = finishedDate.toLocaleTimeString('ko-KR', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            item.textContent = `${setNumber}세트 완료 • ${timeString}`;
-            setLog.appendChild(item);
-        }
-
-        async function saveRoutineLog() {
-            if (!supabaseClient) {
-                logStatus.textContent = 'Supabase 설정이 없어 로그를 저장하지 않았습니다.';
-                logStatus.className = 'message error';
-                return;
-            }
-
-            logStatus.textContent = '로그 저장 중...';
-            logStatus.className = 'message';
-
-            const payload = {
-                set_count: totalSets,
-                set_duration_seconds: setDurationSeconds,
-                completed_sets: completedSets,
-                total_elapsed_seconds: completedSets.length * setDurationSeconds,
-                finished_at: new Date().toISOString()
-            };
-
-            const { error } = await supabaseClient.from('hang_session_logs').insert([payload]);
-            if (error) {
-                logStatus.textContent = `저장 실패: ${error.message}`;
-                logStatus.className = 'message error';
-            } else {
-                logStatus.textContent = 'Supabase에 로그를 저장했습니다.';
-                logStatus.className = 'message success';
-            }
-        }
-
-        function handleSetComplete() {
-            const finishedAt = new Date().toISOString();
-            completedSets.push({
-                set_number: currentSet,
-                finished_at: finishedAt
-            });
-            appendSetLog(currentSet, finishedAt);
-
-            if (currentSet >= totalSets) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-                isRunning = false;
-                isPaused = false;
-                setStatus('완료', 'completed');
-                updateControls();
-                saveRoutineLog();
-                return;
-            }
-
-            currentSet += 1;
-            remainingSeconds = setDurationSeconds;
-            updateTimerDisplay();
-        }
-
-        function startRoutine() {
-            const parsedSets = parseInt(setCountInput.value, 10);
-            const parsedDuration = parseInt(setDurationInput.value, 10);
-
-            if (!Number.isInteger(parsedSets) || parsedSets <= 0) {
-                alert('1 이상의 세트 수를 입력해 주세요.');
-                return;
-            }
-
-            if (!Number.isInteger(parsedDuration) || parsedDuration < 5) {
-                alert('세트당 시간은 5초 이상이어야 합니다.');
-                return;
-            }
-
-            if (isRunning) {
-                return;
-            }
-
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-
-            totalSets = parsedSets;
-            setDurationSeconds = parsedDuration;
-            currentSet = 1;
-            remainingSeconds = setDurationSeconds;
-            completedSets = [];
-            setLog.innerHTML = '';
-            logStatus.textContent = '';
-
-            setStatus('실행 중', 'running');
-            isRunning = true;
-            isPaused = false;
-            updateTimerDisplay();
-            updateControls();
-
-            timerInterval = setInterval(() => {
-                if (isPaused) {
-                    return;
-                }
-                remainingSeconds -= 1;
-                if (remainingSeconds <= 0) {
-                    remainingSeconds = 0;
-                    updateTimerDisplay();
-                    handleSetComplete();
-                } else {
-                    updateTimerDisplay();
-                }
-            }, 1000);
-        }
-
-        function pauseRoutine() {
-            if (!isRunning || isPaused) {
-                return;
-            }
-            isPaused = true;
-            setStatus('일시 정지', 'paused');
-            updateControls();
-        }
-
-        function resumeRoutine() {
-            if (!isRunning || !isPaused) {
-                return;
-            }
-            isPaused = false;
-            setStatus('실행 중', 'running');
-            updateControls();
-        }
-
-        function resetRoutine() {
-            resetState();
-        }
-
-        function loadSupabaseSettings() {
-            const savedUrl = localStorage.getItem(SUPABASE_URL_KEY) || '';
-            const savedKey = localStorage.getItem(SUPABASE_ANON_KEY) || '';
-            supabaseUrlInput.value = savedUrl;
-            supabaseKeyInput.value = savedKey;
-
-            if (savedUrl && savedKey) {
-                supabaseConfig = { url: savedUrl, key: savedKey };
-                supabaseClient = createClient(savedUrl, savedKey);
-                supabaseStatus.textContent = 'Supabase 설정을 불러왔습니다.';
-                supabaseStatus.className = 'message success';
-            } else {
-                supabaseStatus.textContent = 'Supabase URL/anon 키를 입력해 주세요.';
-                supabaseStatus.className = 'message';
-            }
-        }
-
-        function saveSupabaseSettings() {
-            const url = supabaseUrlInput.value.trim();
-            const key = supabaseKeyInput.value.trim();
-
-            if (!url || !key) {
-                supabaseStatus.textContent = 'URL과 anon 키를 모두 입력해 주세요.';
-                supabaseStatus.className = 'message error';
-                return;
-            }
-
-            localStorage.setItem(SUPABASE_URL_KEY, url);
-            localStorage.setItem(SUPABASE_ANON_KEY, key);
-            supabaseConfig = { url, key };
-            supabaseClient = createClient(url, key);
-            supabaseStatus.textContent = 'Supabase 설정을 저장하고 연결했습니다.';
-            supabaseStatus.className = 'message success';
-        }
-
-        function clearSupabaseSettings() {
-            localStorage.removeItem(SUPABASE_URL_KEY);
-            localStorage.removeItem(SUPABASE_ANON_KEY);
-            supabaseUrlInput.value = '';
-            supabaseKeyInput.value = '';
-            supabaseConfig = { url: '', key: '' };
-            supabaseClient = null;
-            supabaseStatus.textContent = '설정을 초기화했습니다.';
-            supabaseStatus.className = 'message';
-        }
-
-        saveSupabaseBtn.addEventListener('click', saveSupabaseSettings);
-        clearSupabaseBtn.addEventListener('click', clearSupabaseSettings);
-        startBtn.addEventListener('click', startRoutine);
-        pauseBtn.addEventListener('click', pauseRoutine);
-        resumeBtn.addEventListener('click', resumeRoutine);
-        resetBtn.addEventListener('click', resetRoutine);
-
-        window.addEventListener('beforeunload', (event) => {
-            if (isRunning) {
-                event.preventDefault();
-                event.returnValue = '';
-            }
-        });
-
-        loadSupabaseSettings();
-        resetState();
     </script>
 </body>
 </html>
