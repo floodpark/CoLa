@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>매달리기 루틴 타이머</title>
+    <style>
+        :root {
+            font-family: "Pretendard", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color-scheme: light;
+            line-height: 1.5;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(1.5rem, 4vw, 3rem);
+            background: linear-gradient(160deg, #f2f6ff 0%, #eef2ff 45%, #f7f8ff 100%);
+            color: #0f172a;
+        }
+
+        main {
+            width: min(960px, 100%);
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 22px;
+            box-shadow: 0 30px 70px rgba(15, 23, 42, 0.12);
+            padding: clamp(2rem, 5vw, 3rem);
+            display: grid;
+            gap: clamp(1.8rem, 4vw, 2.8rem);
+        }
+
+        header h1 {
+            margin: 0 0 0.4rem;
+            font-size: clamp(2rem, 5vw, 2.6rem);
+            color: #111827;
+        }
+
+        header p {
+            margin: 0;
+            color: #475569;
+            font-size: clamp(1rem, 2.4vw, 1.05rem);
+        }
+
+        .panel {
+            background: rgba(248, 250, 252, 0.85);
+            border-radius: 18px;
+            padding: clamp(1.2rem, 3vw, 1.8rem);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+        }
+
+        .panel h2 {
+            margin: 0 0 1rem;
+            font-size: 1.25rem;
+            color: #1f2937;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.75rem 0.9rem;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: #f8fafc;
+            font-size: 1rem;
+            color: #0f172a;
+        }
+
+        input:focus {
+            outline: 2px solid rgba(79, 70, 229, 0.35);
+            outline-offset: 2px;
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        button {
+            border: none;
+            border-radius: 999px;
+            padding: 0.75rem 1.6rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.25s ease;
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .primary {
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: #ffffff;
+            box-shadow: 0 18px 36px rgba(79, 70, 229, 0.2);
+        }
+
+        .secondary {
+            background: rgba(15, 23, 42, 0.08);
+            color: #0f172a;
+        }
+
+        .danger {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+            color: #ffffff;
+        }
+
+        button:not(:disabled):hover {
+            transform: translateY(-2px);
+        }
+
+        .timer-display {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .timer-display strong {
+            font-size: clamp(2.4rem, 10vw, 3.4rem);
+            color: #111827;
+            font-weight: 700;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            background: rgba(59, 130, 246, 0.12);
+            color: #1d4ed8;
+            font-weight: 600;
+        }
+
+        .status-pill.idle {
+            background: rgba(96, 165, 250, 0.15);
+            color: #2563eb;
+        }
+
+        .status-pill.running {
+            background: rgba(74, 222, 128, 0.18);
+            color: #15803d;
+        }
+
+        .status-pill.paused {
+            background: rgba(251, 191, 36, 0.25);
+            color: #b45309;
+        }
+
+        .status-pill.completed {
+            background: rgba(124, 58, 237, 0.16);
+            color: #5b21b6;
+        }
+
+        ul.log-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 0.6rem;
+        }
+
+        ul.log-list li {
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            font-size: 0.95rem;
+            color: #1f2937;
+        }
+
+        .message {
+            margin-top: 0.75rem;
+            font-size: 0.95rem;
+            color: #475569;
+        }
+
+        .message.error {
+            color: #dc2626;
+        }
+
+        .message.success {
+            color: #15803d;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 720px) {
+            body {
+                padding: 1rem;
+            }
+
+            .button-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="app-card">
+            <header>
+                <h1>매달리기 루틴 타이머</h1>
+                <p>세트 수와 시간을 설정하면 자동으로 타이머가 진행되고, 완료된 루틴은 Supabase DB에 기록됩니다.</p>
+            </header>
+
+            <section class="panel" aria-labelledby="supabase-settings-title">
+                <h2 id="supabase-settings-title">Supabase 설정</h2>
+                <p class="message">브라우저에 안전하게 익명 키를 저장합니다. 공개 가능한 anon 키만 사용해 주세요.</p>
+                <label for="supabase-url">Supabase Project URL</label>
+                <input id="supabase-url" type="text" inputmode="url" placeholder="https://xxxx.supabase.co" />
+
+                <label for="supabase-key">Supabase anon 키</label>
+                <input id="supabase-key" type="password" placeholder="eyJhbGciOiJIUzI1NiIsInR..." />
+
+                <div class="button-row" style="margin-top: 0.9rem;">
+                    <button id="save-supabase" class="primary" type="button">설정 저장</button>
+                    <button id="clear-supabase" class="secondary" type="button">설정 초기화</button>
+                </div>
+                <div id="supabase-status" class="message"></div>
+            </section>
+
+            <section class="panel" aria-labelledby="routine-settings-title">
+                <h2 id="routine-settings-title">루틴 설정</h2>
+                <label for="set-count">세트 수</label>
+                <input id="set-count" type="number" min="1" value="3" />
+
+                <label for="set-duration">세트당 시간 (초)</label>
+                <input id="set-duration" type="number" min="5" step="5" value="30" />
+
+                <div class="button-row" style="margin-top: 1.1rem;">
+                    <button id="start-btn" class="primary" type="button">시작</button>
+                    <button id="pause-btn" class="secondary" type="button" disabled>일시 정지</button>
+                    <button id="resume-btn" class="secondary" type="button" disabled>재개</button>
+                    <button id="reset-btn" class="danger" type="button">초기화</button>
+                </div>
+            </section>
+
+            <section class="panel timer-display" aria-labelledby="timer-status-title">
+                <h2 id="timer-status-title">타이머 상태</h2>
+                <div class="status-pill idle" id="routine-status">대기 중</div>
+                <div>
+                    <span>현재 세트</span>
+                    <div><strong id="current-set">0</strong> / <span id="total-sets">0</span></div>
+                </div>
+                <div>
+                    <span>남은 시간</span>
+                    <div><strong id="remaining">00:00</strong></div>
+                </div>
+            </section>
+
+            <section class="panel" aria-labelledby="set-log-title">
+                <h2 id="set-log-title">진행 로그</h2>
+                <ul id="set-log" class="log-list"></ul>
+                <div id="log-status" class="message"></div>
+            </section>
+
+            <footer>© <span id="year"></span> CoLa Routine</footer>
+        </div>
+    </main>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+        const SUPABASE_URL_KEY = 'cola-supabase-url';
+        const SUPABASE_ANON_KEY = 'cola-supabase-anon-key';
+
+        const supabaseUrlInput = document.getElementById('supabase-url');
+        const supabaseKeyInput = document.getElementById('supabase-key');
+        const supabaseStatus = document.getElementById('supabase-status');
+        const saveSupabaseBtn = document.getElementById('save-supabase');
+        const clearSupabaseBtn = document.getElementById('clear-supabase');
+
+        const setCountInput = document.getElementById('set-count');
+        const setDurationInput = document.getElementById('set-duration');
+        const startBtn = document.getElementById('start-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const resumeBtn = document.getElementById('resume-btn');
+        const resetBtn = document.getElementById('reset-btn');
+
+        const routineStatus = document.getElementById('routine-status');
+        const currentSetEl = document.getElementById('current-set');
+        const totalSetsEl = document.getElementById('total-sets');
+        const remainingEl = document.getElementById('remaining');
+        const setLog = document.getElementById('set-log');
+        const logStatus = document.getElementById('log-status');
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        let supabaseClient = null;
+        let supabaseConfig = { url: '', key: '' };
+
+        let timerInterval = null;
+        let isRunning = false;
+        let isPaused = false;
+        let setDurationSeconds = 0;
+        let totalSets = 0;
+        let currentSet = 0;
+        let remainingSeconds = 0;
+        let completedSets = [];
+
+        function formatSeconds(value) {
+            const minutes = Math.floor(value / 60);
+            const seconds = value % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function setStatus(text, variant = 'idle') {
+            routineStatus.textContent = text;
+            routineStatus.className = `status-pill ${variant}`;
+        }
+
+        function updateTimerDisplay() {
+            currentSetEl.textContent = String(currentSet);
+            totalSetsEl.textContent = String(totalSets);
+            remainingEl.textContent = formatSeconds(Math.max(remainingSeconds, 0));
+        }
+
+        function resetState() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            timerInterval = null;
+            isRunning = false;
+            isPaused = false;
+            setDurationSeconds = 0;
+            totalSets = 0;
+            currentSet = 0;
+            remainingSeconds = 0;
+            completedSets = [];
+            setLog.innerHTML = '';
+            logStatus.textContent = '';
+            logStatus.className = 'message';
+            updateTimerDisplay();
+            setStatus('대기 중', 'idle');
+            updateControls();
+        }
+
+        function updateControls() {
+            startBtn.disabled = isRunning;
+            pauseBtn.disabled = !isRunning || isPaused;
+            resumeBtn.disabled = !isPaused;
+        }
+
+        function appendSetLog(setNumber, finishedAt) {
+            const item = document.createElement('li');
+            const finishedDate = new Date(finishedAt);
+            const timeString = finishedDate.toLocaleTimeString('ko-KR', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            item.textContent = `${setNumber}세트 완료 • ${timeString}`;
+            setLog.appendChild(item);
+        }
+
+        async function saveRoutineLog() {
+            if (!supabaseClient) {
+                logStatus.textContent = 'Supabase 설정이 없어 로그를 저장하지 않았습니다.';
+                logStatus.className = 'message error';
+                return;
+            }
+
+            logStatus.textContent = '로그 저장 중...';
+            logStatus.className = 'message';
+
+            const payload = {
+                set_count: totalSets,
+                set_duration_seconds: setDurationSeconds,
+                completed_sets: completedSets,
+                total_elapsed_seconds: completedSets.length * setDurationSeconds,
+                finished_at: new Date().toISOString()
+            };
+
+            const { error } = await supabaseClient.from('hang_session_logs').insert([payload]);
+            if (error) {
+                logStatus.textContent = `저장 실패: ${error.message}`;
+                logStatus.className = 'message error';
+            } else {
+                logStatus.textContent = 'Supabase에 로그를 저장했습니다.';
+                logStatus.className = 'message success';
+            }
+        }
+
+        function handleSetComplete() {
+            const finishedAt = new Date().toISOString();
+            completedSets.push({
+                set_number: currentSet,
+                finished_at: finishedAt
+            });
+            appendSetLog(currentSet, finishedAt);
+
+            if (currentSet >= totalSets) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                isRunning = false;
+                isPaused = false;
+                setStatus('완료', 'completed');
+                updateControls();
+                saveRoutineLog();
+                return;
+            }
+
+            currentSet += 1;
+            remainingSeconds = setDurationSeconds;
+            updateTimerDisplay();
+        }
+
+        function startRoutine() {
+            const parsedSets = parseInt(setCountInput.value, 10);
+            const parsedDuration = parseInt(setDurationInput.value, 10);
+
+            if (!Number.isInteger(parsedSets) || parsedSets <= 0) {
+                alert('1 이상의 세트 수를 입력해 주세요.');
+                return;
+            }
+
+            if (!Number.isInteger(parsedDuration) || parsedDuration < 5) {
+                alert('세트당 시간은 5초 이상이어야 합니다.');
+                return;
+            }
+
+            if (isRunning) {
+                return;
+            }
+
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+
+            totalSets = parsedSets;
+            setDurationSeconds = parsedDuration;
+            currentSet = 1;
+            remainingSeconds = setDurationSeconds;
+            completedSets = [];
+            setLog.innerHTML = '';
+            logStatus.textContent = '';
+
+            setStatus('실행 중', 'running');
+            isRunning = true;
+            isPaused = false;
+            updateTimerDisplay();
+            updateControls();
+
+            timerInterval = setInterval(() => {
+                if (isPaused) {
+                    return;
+                }
+                remainingSeconds -= 1;
+                if (remainingSeconds <= 0) {
+                    remainingSeconds = 0;
+                    updateTimerDisplay();
+                    handleSetComplete();
+                } else {
+                    updateTimerDisplay();
+                }
+            }, 1000);
+        }
+
+        function pauseRoutine() {
+            if (!isRunning || isPaused) {
+                return;
+            }
+            isPaused = true;
+            setStatus('일시 정지', 'paused');
+            updateControls();
+        }
+
+        function resumeRoutine() {
+            if (!isRunning || !isPaused) {
+                return;
+            }
+            isPaused = false;
+            setStatus('실행 중', 'running');
+            updateControls();
+        }
+
+        function resetRoutine() {
+            resetState();
+        }
+
+        function loadSupabaseSettings() {
+            const savedUrl = localStorage.getItem(SUPABASE_URL_KEY) || '';
+            const savedKey = localStorage.getItem(SUPABASE_ANON_KEY) || '';
+            supabaseUrlInput.value = savedUrl;
+            supabaseKeyInput.value = savedKey;
+
+            if (savedUrl && savedKey) {
+                supabaseConfig = { url: savedUrl, key: savedKey };
+                supabaseClient = createClient(savedUrl, savedKey);
+                supabaseStatus.textContent = 'Supabase 설정을 불러왔습니다.';
+                supabaseStatus.className = 'message success';
+            } else {
+                supabaseStatus.textContent = 'Supabase URL/anon 키를 입력해 주세요.';
+                supabaseStatus.className = 'message';
+            }
+        }
+
+        function saveSupabaseSettings() {
+            const url = supabaseUrlInput.value.trim();
+            const key = supabaseKeyInput.value.trim();
+
+            if (!url || !key) {
+                supabaseStatus.textContent = 'URL과 anon 키를 모두 입력해 주세요.';
+                supabaseStatus.className = 'message error';
+                return;
+            }
+
+            localStorage.setItem(SUPABASE_URL_KEY, url);
+            localStorage.setItem(SUPABASE_ANON_KEY, key);
+            supabaseConfig = { url, key };
+            supabaseClient = createClient(url, key);
+            supabaseStatus.textContent = 'Supabase 설정을 저장하고 연결했습니다.';
+            supabaseStatus.className = 'message success';
+        }
+
+        function clearSupabaseSettings() {
+            localStorage.removeItem(SUPABASE_URL_KEY);
+            localStorage.removeItem(SUPABASE_ANON_KEY);
+            supabaseUrlInput.value = '';
+            supabaseKeyInput.value = '';
+            supabaseConfig = { url: '', key: '' };
+            supabaseClient = null;
+            supabaseStatus.textContent = '설정을 초기화했습니다.';
+            supabaseStatus.className = 'message';
+        }
+
+        saveSupabaseBtn.addEventListener('click', saveSupabaseSettings);
+        clearSupabaseBtn.addEventListener('click', clearSupabaseSettings);
+        startBtn.addEventListener('click', startRoutine);
+        pauseBtn.addEventListener('click', pauseRoutine);
+        resumeBtn.addEventListener('click', resumeRoutine);
+        resetBtn.addEventListener('click', resetRoutine);
+
+        window.addEventListener('beforeunload', (event) => {
+            if (isRunning) {
+                event.preventDefault();
+                event.returnValue = '';
+            }
+        });
+
+        loadSupabaseSettings();
+        resetState();
+    </script>
+</body>
+</html>
