@@ -41,6 +41,34 @@
             gap: clamp(1.8rem, 4vw, 2.8rem);
         }
 
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.55rem 1.1rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.06);
+            color: #0f172a;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .back-link:hover,
+        .back-link:focus-visible {
+            background: rgba(15, 23, 42, 0.1);
+            transform: translateY(-1px);
+            outline: none;
+        }
+
         header h1 {
             margin: 0 0 0.4rem;
             font-size: clamp(2rem, 5vw, 2.6rem);
@@ -233,6 +261,11 @@
 <body>
     <main>
         <div class="app-card">
+            <div class="top-nav">
+                <a class="back-link" href="index.html" aria-label="메인으로 이동">
+                    ← 메인으로 돌아가기
+                </a>
+            </div>
             <header>
                 <h1>매달리기 루틴 타이머</h1>
                 <p>세트 수와 시간을 설정하면 자동으로 타이머가 진행되고, 완료된 루틴은 Supabase DB에 기록됩니다.</p>
