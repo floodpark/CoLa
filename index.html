@@ -206,6 +206,70 @@
             font-size: 0.98rem;
         }
 
+        .readme-panel {
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(148, 163, 184, 0.24);
+            box-shadow: 0 22px 48px rgba(15, 23, 42, 0.08);
+            padding: clamp(2rem, 5vw, 3.2rem);
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .readme-content {
+            display: grid;
+            gap: 1rem;
+            line-height: 1.7;
+            color: #1f2937;
+        }
+
+        .readme-content h1,
+        .readme-content h2,
+        .readme-content h3,
+        .readme-content h4,
+        .readme-content h5,
+        .readme-content h6 {
+            margin: 0;
+            color: #0f172a;
+        }
+
+        .readme-content p {
+            margin: 0;
+        }
+
+        .readme-error {
+            color: #dc2626;
+        }
+
+        .readme-content ul {
+            margin: 0;
+            padding-left: 1.2rem;
+            display: grid;
+            gap: 0.4rem;
+        }
+
+        .readme-content pre {
+            margin: 0;
+            background: #0f172a;
+            color: #f8fafc;
+            padding: 1rem 1.25rem;
+            border-radius: 18px;
+            overflow-x: auto;
+        }
+
+        .readme-content code {
+            background: rgba(15, 23, 42, 0.08);
+            color: #1f2937;
+            padding: 0.15rem 0.4rem;
+            border-radius: 6px;
+        }
+
+        .readme-content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
         .card-footer {
             display: flex;
             flex-wrap: wrap;
@@ -323,6 +387,7 @@
             <nav aria-label="주요 링크">
                 <a href="#apps">앱 소개</a>
                 <a href="#guides">가이드</a>
+                <a href="#readme-preview">README</a>
                 <a href="https://github.com/floodpark/CoLa" target="_blank" rel="noreferrer">GitHub</a>
             </nav>
         </div>
@@ -356,7 +421,7 @@
                         </p>
                         <div class="card-footer">
                             <a href="routine/">타이머 열기 →</a>
-                            <a href="README.md">설정 가이드 →</a>
+                            <a href="#readme-preview">설정 가이드 →</a>
                         </div>
                     </div>
                     <div class="card">
@@ -379,8 +444,20 @@
                 <p class="section-subtitle">프로젝트 구조와 운영 원칙은 아래 문서를 참고하세요.</p>
                 <div class="link-list">
                     <a class="link-tile" href="AGENTS.md">Repository Guidelines<span aria-hidden="true">→</span></a>
-                    <a class="link-tile" href="README.md">루틴 앱 사용법<span aria-hidden="true">→</span></a>
+                    <a class="link-tile" href="#readme-preview">루틴 앱 사용법<span aria-hidden="true">→</span></a>
                     <a class="link-tile" href="저속노화.html">저속노화 식단 가이드<span aria-hidden="true">→</span></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="readme-preview" class="section">
+            <div class="section-inner">
+                <div class="readme-panel">
+                    <h2 class="section-title">README 미리보기</h2>
+                    <p class="section-subtitle">배포 전 확인해야 할 설정과 사용 방법을 바로 확인하세요.</p>
+                    <div id="readme-content" class="readme-content" aria-live="polite">
+                        <p>README를 불러오는 중...</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -394,6 +471,122 @@
         const yearEl = document.getElementById('year');
         if (yearEl) {
             yearEl.textContent = new Date().getFullYear();
+        }
+
+        const readmeContainer = document.getElementById('readme-content');
+
+        function escapeHtml(value) {
+            return value
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function formatInline(text) {
+            let html = escapeHtml(text);
+            html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            return html;
+        }
+
+        function markdownToHtml(markdown) {
+            const lines = markdown.split(/\r?\n/);
+            let html = '';
+            let inList = false;
+            let inCode = false;
+            let codeLang = '';
+            let codeLines = [];
+
+            const closeList = () => {
+                if (inList) {
+                    html += '</ul>';
+                    inList = false;
+                }
+            };
+
+            const closeCode = () => {
+                if (inCode) {
+                    const code = escapeHtml(codeLines.join('\n'));
+                    const langAttr = codeLang ? ` class="language-${codeLang}"` : '';
+                    html += `<pre><code${langAttr}>${code}</code></pre>`;
+                    inCode = false;
+                    codeLang = '';
+                    codeLines = [];
+                }
+            };
+
+            for (const rawLine of lines) {
+                const line = rawLine;
+                if (line.trim().startsWith('```')) {
+                    if (!inCode) {
+                        closeList();
+                        inCode = true;
+                        codeLang = line.trim().slice(3).trim();
+                        codeLines = [];
+                    } else {
+                        closeCode();
+                    }
+                    continue;
+                }
+
+                if (inCode) {
+                    codeLines.push(line);
+                    continue;
+                }
+
+                if (!line.trim()) {
+                    closeList();
+                    continue;
+                }
+
+                const headingMatch = line.match(/^(#{1,6})\s+(.*)$/);
+                if (headingMatch) {
+                    closeList();
+                    const level = headingMatch[1].length;
+                    html += `<h${level}>${formatInline(headingMatch[2])}</h${level}>`;
+                    continue;
+                }
+
+                const listMatch = line.match(/^[-*+]\s+(.*)$/);
+                if (listMatch) {
+                    if (!inList) {
+                        html += '<ul>';
+                        inList = true;
+                    }
+                    html += `<li>${formatInline(listMatch[1])}</li>`;
+                    continue;
+                }
+
+                closeList();
+                html += `<p>${formatInline(line)}</p>`;
+            }
+
+            closeCode();
+            closeList();
+            return html;
+        }
+
+        async function loadReadme() {
+            if (!readmeContainer) {
+                return;
+            }
+            readmeContainer.innerHTML = '<p>README를 불러오는 중...</p>';
+            try {
+                const response = await fetch('README.md', { cache: 'no-store' });
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const markdown = await response.text();
+                readmeContainer.innerHTML = markdownToHtml(markdown);
+            } catch (error) {
+                readmeContainer.innerHTML = `<p class="readme-error">README를 불러오지 못했습니다: ${escapeHtml(error.message)}</p>`;
+            }
+        }
+
+        if (readmeContainer) {
+            loadReadme();
         }
     </script>
 </body>
