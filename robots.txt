@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://floodpark.github.io/CoLa/sitemap.xml
