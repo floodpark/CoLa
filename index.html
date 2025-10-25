@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CoLa Routine Hub</title>
-    <meta name="description" content="CoLa 루틴 허브: 매달리기 타이머와 저속노화 식단 가이드를 한 곳에서 확인하세요." />
+    <title>CoLa 소개</title>
     <style>
         :root {
             font-family: "Pretendard", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            color-scheme: light;
-            line-height: 1.6;
+            color-scheme: only light;
         }
 
         *,
@@ -20,588 +18,398 @@
 
         body {
             margin: 0;
-            min-height: 100vh;
+            background: linear-gradient(160deg, #f2f6ff 0%, #eef2ff 45%, #f7f8ff 100%);
+            color: #1f2a44;
+        }
+
+        .page {
             display: flex;
             flex-direction: column;
-            background: linear-gradient(160deg, #f2f6ff 0%, #eef2ff 45%, #f7f8ff 100%);
-            color: #0f172a;
+            min-height: 100vh;
         }
 
         header {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            backdrop-filter: blur(8px);
-            background: rgba(255, 255, 255, 0.85);
-            border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-        }
-
-        .nav-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            max-width: 1120px;
-            height: 68px;
-            margin: 0 auto;
-            padding: 0 1.75rem;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #1f2937;
-        }
-
-        .brand span {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(99, 102, 241, 0.12);
-            color: #4f46e5;
-            font-size: 1.3rem;
-        }
-
-        nav a {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #475569;
-            text-decoration: none;
-            padding: 0.45rem 0.9rem;
-            border-radius: 999px;
-            transition: background 0.2s ease, color 0.2s ease;
-        }
-
-        nav a:hover,
-        nav a:focus-visible {
-            background: rgba(99, 102, 241, 0.12);
-            color: #4f46e5;
-            outline: none;
-        }
-
-        main {
-            flex: 1;
+            padding: clamp(2.5rem, 8vw, 5rem) clamp(1.6rem, 6vw, 4rem);
+            background: radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15), transparent 45%),
+                radial-gradient(circle at 85% 30%, rgba(34, 197, 94, 0.15), transparent 40%),
+                #ffffffaa;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(31, 42, 68, 0.08);
         }
 
         .hero {
-            padding: clamp(4rem, 8vw, 6rem) 1.75rem;
-        }
-
-        .hero-inner {
-            max-width: 800px;
+            max-width: 960px;
             margin: 0 auto;
-            text-align: center;
             display: grid;
-            gap: 1.8rem;
+            gap: clamp(1.5rem, 4vw, 3rem);
         }
 
-        .hero-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 0 auto;
-            padding: 0.4rem 1rem;
-            border-radius: 999px;
-            background: rgba(79, 70, 229, 0.12);
-            color: #4338ca;
-            font-weight: 600;
-            font-size: 0.85rem;
-            letter-spacing: 0.1em;
-        }
-
-        h1 {
+        .hero h1 {
             margin: 0;
-            font-size: clamp(2.4rem, 6vw, 3.2rem);
+            font-size: clamp(2.4rem, 6vw, 3.6rem);
+            letter-spacing: -0.02em;
             color: #111827;
         }
 
         .hero p {
             margin: 0;
-            font-size: 1.1rem;
-            color: #475569;
+            font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+            line-height: 1.8;
+            color: #364152;
         }
 
         .hero-actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.8rem;
-            justify-content: center;
+            gap: 0.9rem;
+            margin-top: 1.6rem;
         }
 
-        .button {
+        .cta-primary,
+        .cta-secondary {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            padding: 0.85rem 1.6rem;
+            gap: 0.5rem;
             border-radius: 999px;
-            border: none;
+            padding: 0.85rem 1.8rem;
             font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.25s ease;
             text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.25s ease, background 0.3s ease;
         }
 
-        .button-primary {
+        .cta-primary {
             background: linear-gradient(135deg, #4f46e5, #6366f1);
             color: #ffffff;
-            box-shadow: 0 18px 36px rgba(79, 70, 229, 0.18);
+            box-shadow: 0 18px 30px rgba(79, 70, 229, 0.25);
         }
 
-        .button-secondary {
-            background: rgba(15, 23, 42, 0.06);
-            color: #0f172a;
-        }
-
-        .button:hover,
-        .button:focus-visible {
+        .cta-primary:hover {
             transform: translateY(-2px);
-            outline: none;
+            box-shadow: 0 20px 36px rgba(79, 70, 229, 0.32);
         }
 
-        .section {
-            padding: 0 1.75rem clamp(3rem, 6vw, 4rem);
+        .cta-secondary {
+            background: rgba(15, 23, 42, 0.05);
+            color: #1f2a44;
         }
 
-        .section-inner {
-            max-width: 1040px;
-            margin: 0 auto;
-        }
-
-        .cards {
-            display: grid;
-            gap: clamp(1.4rem, 4vw, 2rem);
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        }
-
-        .card {
-            border-radius: 24px;
-            padding: 2.2rem;
-            background: rgba(255, 255, 255, 0.92);
-            border: 1px solid rgba(148, 163, 184, 0.24);
-            box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
-            display: grid;
-            gap: 1rem;
-        }
-
-        .card h2 {
-            margin: 0;
-            font-size: 1.5rem;
-            color: #111827;
-        }
-
-        .card p {
-            margin: 0;
-            color: #475569;
-            font-size: 0.98rem;
-        }
-
-        .readme-panel {
-            border-radius: 28px;
-            background: rgba(255, 255, 255, 0.95);
-            border: 1px solid rgba(148, 163, 184, 0.24);
-            box-shadow: 0 22px 48px rgba(15, 23, 42, 0.08);
-            padding: clamp(2rem, 5vw, 3.2rem);
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .readme-content {
-            display: grid;
-            gap: 1rem;
-            line-height: 1.7;
-            color: #1f2937;
-        }
-
-        .readme-content h1,
-        .readme-content h2,
-        .readme-content h3,
-        .readme-content h4,
-        .readme-content h5,
-        .readme-content h6 {
-            margin: 0;
-            color: #0f172a;
-        }
-
-        .readme-content p {
-            margin: 0;
-        }
-
-        .readme-error {
-            color: #dc2626;
-        }
-
-        .readme-content ul {
-            margin: 0;
-            padding-left: 1.2rem;
-            display: grid;
-            gap: 0.4rem;
-        }
-
-        .readme-content pre {
-            margin: 0;
-            background: #0f172a;
-            color: #f8fafc;
-            padding: 1rem 1.25rem;
-            border-radius: 18px;
-            overflow-x: auto;
-        }
-
-        .readme-content code {
+        .cta-secondary:hover {
             background: rgba(15, 23, 42, 0.08);
-            color: #1f2937;
-            padding: 0.15rem 0.4rem;
-            border-radius: 6px;
+            transform: translateY(-1px);
         }
 
-        .readme-content pre code {
-            background: transparent;
-            color: inherit;
-            padding: 0;
-        }
-
-        .card-footer {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            border-radius: 999px;
-            background: rgba(79, 70, 229, 0.1);
-            color: #4f46e5;
-            font-size: 0.8rem;
-            font-weight: 600;
-            padding: 0.35rem 0.9rem;
-        }
-
-        .card a {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-weight: 600;
-            text-decoration: none;
-            color: #4f46e5;
-            border-radius: 999px;
-            padding: 0.55rem 1.1rem;
-            background: rgba(79, 70, 229, 0.08);
-            transition: background 0.2s ease;
-        }
-
-        .card a:hover,
-        .card a:focus-visible {
-            background: rgba(79, 70, 229, 0.16);
-            outline: none;
+        main {
+            flex: 1;
+            padding: clamp(2.5rem, 8vw, 4.5rem) clamp(1.6rem, 6vw, 4rem);
         }
 
         .section-title {
-            margin-bottom: 1.4rem;
-            font-size: 1.8rem;
-            font-weight: 700;
+            font-size: clamp(1.6rem, 3vw, 2.1rem);
+            margin: 0 0 1rem;
             color: #111827;
         }
 
-        .section-subtitle {
-            margin-bottom: 2.4rem;
-            color: #475569;
-            font-size: 1rem;
+        .highlights {
+            max-width: 1040px;
+            margin: 0 auto;
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
         }
 
-        .link-list {
+        .highlight-card {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 18px;
+            padding: 1.8rem;
+            border: 1px solid rgba(99, 102, 241, 0.12);
+            box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 26px 48px rgba(15, 23, 42, 0.12);
+        }
+
+        .highlight-card h2 {
+            margin: 0 0 0.75rem;
+            font-size: 1.35rem;
+            color: #312e81;
+        }
+
+        .highlight-card p {
+            margin: 0;
+            color: #4b5563;
+            line-height: 1.7;
+            font-size: 0.98rem;
+        }
+
+        .details {
+            max-width: 960px;
+            margin: clamp(3rem, 9vw, 4.5rem) auto;
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .details article {
+            background: #ffffffd1;
+            border-radius: 16px;
+            padding: 1.8rem;
+            border: 1px solid rgba(148, 163, 184, 0.22);
+        }
+
+        .details h3 {
+            margin: 0 0 0.85rem;
+            font-size: 1.2rem;
+            color: #1f2937;
+        }
+
+        .details p {
+            margin: 0;
+            line-height: 1.75;
+            color: #475569;
+            font-size: 0.97rem;
+        }
+
+        .timeline {
+            max-width: 960px;
+            margin: 0 auto clamp(4rem, 9vw, 5.5rem);
+            background: #0f172a;
+            color: #f8fafc;
+            border-radius: 22px;
+            padding: clamp(2rem, 6vw, 3rem);
+            box-shadow: 0 25px 48px rgba(15, 23, 42, 0.35);
+        }
+
+        .timeline h2 {
+            margin: 0 0 1.5rem;
+            font-size: clamp(1.6rem, 3vw, 2.1rem);
+        }
+
+        .timeline-steps {
+            display: grid;
+            gap: 1.6rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .timeline-step {
+            background: rgba(148, 163, 255, 0.12);
+            border-radius: 16px;
+            padding: 1.4rem;
+        }
+
+        .timeline-step strong {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-size: 1.05rem;
+            color: #c7d2fe;
+            letter-spacing: 0.01em;
+        }
+
+        .timeline-step span {
+            color: #e2e8f0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .resources {
+            max-width: 960px;
+            margin: 0 auto clamp(3rem, 8vw, 4.5rem);
+        }
+
+        .resource-links {
             display: grid;
             gap: 1rem;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         }
 
-        .link-tile {
+        .resource-card {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem 1.2rem;
-            border-radius: 18px;
+            flex-direction: column;
+            gap: 0.4rem;
+            padding: 1.2rem 1.4rem;
+            border-radius: 16px;
             background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(148, 163, 184, 0.2);
-            color: #1f2937;
+            border: 1px solid rgba(99, 102, 241, 0.15);
             text-decoration: none;
-            font-weight: 600;
+            color: #1f2937;
             transition: transform 0.2s ease, box-shadow 0.25s ease;
         }
 
-        .link-tile:hover,
-        .link-tile:focus-visible {
+        .resource-card span {
+            font-size: 0.92rem;
+            color: #475569;
+        }
+
+        .resource-card:hover,
+        .resource-card:focus-visible {
             transform: translateY(-2px);
-            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.1);
+            box-shadow: 0 18px 30px rgba(79, 70, 229, 0.18);
             outline: none;
         }
 
         footer {
-            padding: 2.5rem 1.75rem 3rem;
+            padding: 2rem;
             text-align: center;
-            color: #94a3b8;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            color: #64748b;
         }
 
-        @media (max-width: 720px) {
-            .nav-container {
-                height: auto;
-                padding: 1rem 1.25rem;
-                align-items: flex-start;
-                gap: 1.2rem;
-                flex-direction: column;
-            }
-
+        @media (max-width: 640px) {
             .hero-actions {
                 flex-direction: column;
+                align-items: stretch;
             }
 
-            .button {
+            .cta-primary,
+            .cta-secondary {
+                justify-content: center;
                 width: 100%;
-            }
-
-            nav a {
-                padding: 0.35rem 0.7rem;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="nav-container">
-            <div class="brand">
-                <span aria-hidden="true">🏋️‍♂️</span>
-                CoLa Routine Hub
-            </div>
-            <nav aria-label="주요 링크">
-                <a href="#apps">앱 소개</a>
-                <a href="#guides">가이드</a>
-                <a href="#readme-preview">README</a>
-                <a href="석기시대.html">석기 시대</a>
-                <a href="https://github.com/floodpark/CoLa" target="_blank" rel="noreferrer">GitHub</a>
-            </nav>
-        </div>
-    </header>
-
-    <main>
-        <section class="hero">
-            <div class="hero-inner">
-                <div class="hero-tag">CoLa Wellness Program</div>
-                <h1>균형 잡힌 루틴과 식단, 한 곳에서 시작하기</h1>
+    <div class="page">
+        <header>
+            <div class="hero">
+                <h1>CoLa에 오신 것을 환영합니다</h1>
                 <p>
-                    매달리기 루틴 타이머로 운동 흐름을 자동화하고, 49세 남성을 위한 저속노화 식단 가이드로 혈관 건강을 설계하세요.
+                    CoLa는 창의적인 사람들과 혁신을 꿈꾸는 팀이 서로의 에너지를 나누고, 함께 성장할 수 있도록 설계된 커뮤니티입니다.
+                    아이디어 발굴부터 프로젝트 실행까지, 여러분의 다음 여정이 자연스럽게 연결되도록 돕습니다.
                 </p>
                 <div class="hero-actions">
-                    <a class="button button-primary" href="routine/">매달리기 타이머 실행하기</a>
-                    <a class="button button-secondary" href="저속노화.html">저속노화 식단 살펴보기</a>
-                    <a class="button button-secondary" href="석기시대.html">석기 시대 탐구하기</a>
+                    <a class="cta-primary" href="#join">지금 참여하기</a>
+                    <a class="cta-secondary" href="#programs">프로그램 살펴보기</a>
+                    <a class="cta-secondary" href="석기시대.html">석기 시대 탐구하기</a>
                 </div>
             </div>
-        </section>
-
-        <section id="apps" class="section">
-            <div class="section-inner">
-                <h2 class="section-title">제품 카드</h2>
-                <p class="section-subtitle">CoLa 팀이 유지 관리하는 핵심 툴을 선택해 바로 실행하세요.</p>
-                <div class="cards">
-                    <div class="card">
-                        <div class="badge">#Supabase 연동</div>
-                        <h2>매달리기 루틴 타이머</h2>
+        </header>
+        <main>
+            <section id="programs">
+                <h2 class="section-title">우리가 만드는 변화</h2>
+                <div class="highlights">
+                    <article class="highlight-card">
+                        <h2>실전형 프로그램</h2>
                         <p>
-                            세트 수와 시간을 입력하면 자동으로 타이머가 작동하고, 완료 로그가 Supabase DB에 저장됩니다. 실시간 상태와 로그를 한 화면에서 확인할 수 있습니다.
+                            디자인 스프린트, 서비스 제작, 해커톤 등 실무 중심 활동으로 아이디어를 빠르게 실험하고 성장시킵니다.
                         </p>
-                        <div class="card-footer">
-                            <a href="routine/">타이머 열기 →</a>
-                            <a href="#readme-preview">설정 가이드 →</a>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="badge">#Wellness Content</div>
-                        <h2>49세 남성 저속노화 식단</h2>
+                    </article>
+                    <article class="highlight-card">
+                        <h2>확장 가능한 네트워크</h2>
                         <p>
-                            뇌와 심혈관 건강을 위해 설계한 맞춤형 식단 전략. 오메가-3, 항산화, 나트륨 관리 포인트를 체크리스트와 함께 제공합니다.
+                            멘토, 업계 전문가, 동료 메이커와의 연결을 통해 서로의 경험을 공유하고 든든한 협업 생태계를 만듭니다.
                         </p>
-                        <div class="card-footer">
-                            <a href="저속노화.html">식단 가이드 보기 →</a>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="badge">#History Lab</div>
-                        <h2>석기 시대 인터랙티브 리포트</h2>
+                    </article>
+                    <article class="highlight-card">
+                        <h2>지속 가능한 성장</h2>
                         <p>
-                            구·중·신석기 시대를 한눈에 비교하고, 도구·사회·경제 변화를 차트와 카드로 살펴보는 대화형 학습 자료입니다.
+                            목표 설정과 피드백 세션을 통해 장기적인 커리어 로드맵을 설계하며, 각자의 가능성을 현실로 이끕니다.
                         </p>
-                        <div class="card-footer">
-                            <a href="석기시대.html">리포트 열기 →</a>
-                        </div>
+                    </article>
+                    <article class="highlight-card">
+                        <h2>열린 문화</h2>
+                        <p>
+                            누구나 주도적으로 제안하고 실행하는 문화를 통해 실패를 두려워하지 않는 안전한 실험실을 제공합니다.
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="details" aria-labelledby="detail-title">
+                <h2 id="detail-title" class="sr-only">CoLa 커뮤니티에서 경험할 수 있는 것</h2>
+                <article>
+                    <h3>함께 성장하는 러닝 트랙</h3>
+                    <p>
+                        다양한 러닝 트랙을 통해 기술, 디자인, 비즈니스 등 폭넓은 분야를 탐색합니다. 커뮤니티 리더가 큐레이션한 커리큘럼과 피어 러닝으로 지식을 실전에 연결하세요.
+                    </p>
+                </article>
+                <article>
+                    <h3>커뮤니티가 만드는 프로젝트</h3>
+                    <p>
+                        관심사 기반의 프로젝트 팀이 자율적으로 구성되어 제품을 만들고 검증합니다. CoLa는 필요한 자원과 피드백을 제공해 프로젝트의 완성도를 높입니다.
+                    </p>
+                </article>
+                <article>
+                    <h3>의미 있는 관계</h3>
+                    <p>
+                        정기 네트워킹과 소규모 멘토링으로 깊이 있는 대화를 나누며, 협업 가능한 파트너를 자연스럽게 만날 수 있습니다. 함께 걸어갈 동료들을 발견해 보세요.
+                    </p>
+                </article>
+            </section>
+
+            <section class="timeline" id="join">
+                <h2>이렇게 함께해요</h2>
+                <div class="timeline-steps">
+                    <div class="timeline-step">
+                        <strong>1. 오리엔테이션 참여</strong>
+                        <span>CoLa의 철학과 활동 방식을 소개받고, 커뮤니티가 추구하는 가치를 확인합니다.</span>
+                    </div>
+                    <div class="timeline-step">
+                        <strong>2. 맞춤형 온보딩</strong>
+                        <span>관심 분야와 목표를 바탕으로 맞춤 러닝 플랜과 프로젝트 팀을 추천받습니다.</span>
+                    </div>
+                    <div class="timeline-step">
+                        <strong>3. 프로젝트 실행</strong>
+                        <span>정기 세션과 동료 피드백을 활용해 아이디어를 제품과 서비스로 성장시킵니다.</span>
+                    </div>
+                    <div class="timeline-step">
+                        <strong>4. 성과 공유 & 확장</strong>
+                        <span>데모 데이와 커뮤니티 쇼케이스에서 결과를 나누고, 더 넓은 네트워크로 활동을 확장합니다.</span>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="guides" class="section">
-            <div class="section-inner">
-                <h2 class="section-title">리소스 링크</h2>
-                <p class="section-subtitle">프로젝트 구조와 운영 원칙은 아래 문서를 참고하세요.</p>
-                <div class="link-list">
-                    <a class="link-tile" href="AGENTS.md">Repository Guidelines<span aria-hidden="true">→</span></a>
-                    <a class="link-tile" href="#readme-preview">루틴 앱 사용법<span aria-hidden="true">→</span></a>
-                    <a class="link-tile" href="저속노화.html">저속노화 식단 가이드<span aria-hidden="true">→</span></a>
-                    <a class="link-tile" href="석기시대.html">석기 시대 탐구<span aria-hidden="true">→</span></a>
-                    <a class="link-tile" href="농장작업매뉴얼.md">농장 작업 매뉴얼<span aria-hidden="true">→</span></a>
+            <section class="resources" aria-labelledby="resource-title">
+                <h2 id="resource-title" class="section-title">하위 메뉴 · 자료실</h2>
+                <div class="resource-links">
+                    <a class="resource-card" href="README.md">
+                        <strong>루틴 앱 README</strong>
+                        <span>타이머 설정과 Supabase 연동 방법을 정리한 가이드입니다.</span>
+                    </a>
+                    <a class="resource-card" href="AGENTS.md">
+                        <strong>운영 에이전트 규칙</strong>
+                        <span>Repository 운영 원칙과 에이전트 지침을 확인하세요.</span>
+                    </a>
+                    <a class="resource-card" href="저속노화.html">
+                        <strong>저속노화 프로그램</strong>
+                        <span>49세 남성 맞춤 식단 전략과 실천 팁을 제공합니다.</span>
+                    </a>
+                    <a class="resource-card" href="석기시대.html">
+                        <strong>석기 시대 탐구</strong>
+                        <span>구·중·신석기 시대를 비교하는 대화형 리포트입니다.</span>
+                    </a>
+                    <a class="resource-card" href="농장작업매뉴얼.md">
+                        <strong>농장 작업 매뉴얼</strong>
+                        <span>농장 운영을 위한 단계별 작업 절차와 주의사항을 확인하세요.</span>
+                    </a>
+                    <a class="resource-card" href="농장작업매뉴얼.html">
+                        <strong>농장 작업 매뉴얼 (웹)</strong>
+                        <span>표와 섹션이 정리된 웹 페이지로 빠르게 내용을 훑어보세요.</span>
+                    </a>
                 </div>
-            </div>
-        </section>
-
-        <section id="readme-preview" class="section">
-            <div class="section-inner">
-                <div class="readme-panel">
-                    <h2 class="section-title">README 미리보기</h2>
-                    <p class="section-subtitle">배포 전 확인해야 할 설정과 사용 방법을 바로 확인하세요.</p>
-                    <div id="readme-content" class="readme-content" aria-live="polite">
-                        <p>README를 불러오는 중...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        © <span id="year"></span> CoLa Routine. Supabase & Wellness by CoLa 팀.
-    </footer>
+            </section>
+        </main>
+        <footer>
+            © <span id="year"></span> CoLa Community. 함께 만드는 미래.
+        </footer>
+    </div>
 
     <script>
-        const yearEl = document.getElementById('year');
-        if (yearEl) {
-            yearEl.textContent = new Date().getFullYear();
-        }
-
-        const readmeContainer = document.getElementById('readme-content');
-
-        function escapeHtml(value) {
-            return value
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
-
-        function formatInline(text) {
-            let html = escapeHtml(text);
-            html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-            return html;
-        }
-
-        function markdownToHtml(markdown) {
-            const lines = markdown.split(/\r?\n/);
-            let html = '';
-            let inList = false;
-            let inCode = false;
-            let codeLang = '';
-            let codeLines = [];
-
-            const closeList = () => {
-                if (inList) {
-                    html += '</ul>';
-                    inList = false;
-                }
-            };
-
-            const closeCode = () => {
-                if (inCode) {
-                    const code = escapeHtml(codeLines.join('\n'));
-                    const langAttr = codeLang ? ` class="language-${codeLang}"` : '';
-                    html += `<pre><code${langAttr}>${code}</code></pre>`;
-                    inCode = false;
-                    codeLang = '';
-                    codeLines = [];
-                }
-            };
-
-            for (const rawLine of lines) {
-                const line = rawLine;
-                if (line.trim().startsWith('```')) {
-                    if (!inCode) {
-                        closeList();
-                        inCode = true;
-                        codeLang = line.trim().slice(3).trim();
-                        codeLines = [];
-                    } else {
-                        closeCode();
-                    }
-                    continue;
-                }
-
-                if (inCode) {
-                    codeLines.push(line);
-                    continue;
-                }
-
-                if (!line.trim()) {
-                    closeList();
-                    continue;
-                }
-
-                const headingMatch = line.match(/^(#{1,6})\s+(.*)$/);
-                if (headingMatch) {
-                    closeList();
-                    const level = headingMatch[1].length;
-                    html += `<h${level}>${formatInline(headingMatch[2])}</h${level}>`;
-                    continue;
-                }
-
-                const listMatch = line.match(/^[-*+]\s+(.*)$/);
-                if (listMatch) {
-                    if (!inList) {
-                        html += '<ul>';
-                        inList = true;
-                    }
-                    html += `<li>${formatInline(listMatch[1])}</li>`;
-                    continue;
-                }
-
-                closeList();
-                html += `<p>${formatInline(line)}</p>`;
-            }
-
-            closeCode();
-            closeList();
-            return html;
-        }
-
-        async function loadReadme() {
-            if (!readmeContainer) {
-                return;
-            }
-            readmeContainer.innerHTML = '<p>README를 불러오는 중...</p>';
-            try {
-                const response = await fetch('README.md', { cache: 'no-store' });
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                const markdown = await response.text();
-                readmeContainer.innerHTML = markdownToHtml(markdown);
-            } catch (error) {
-                readmeContainer.innerHTML = `<p class="readme-error">README를 불러오지 못했습니다: ${escapeHtml(error.message)}</p>`;
-            }
-        }
-
-        if (readmeContainer) {
-            loadReadme();
-        }
+        document.getElementById("year").textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
